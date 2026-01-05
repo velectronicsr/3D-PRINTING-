@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>V Electronics | Online 3D Printing Service & Manufacturing Hub</title>
-    <meta name="description" content="Instant 3D printing quotes online. Upload STL files for rapid prototyping in PLA, PETG, ABS, & Nylon. Professional manufacturing hub based in Pune, shipping across India.">
-    <meta name="keywords" content="3D printing service India, online STL slicer, rapid prototyping Pune, FDM printing service, custom manufacturing, PLA ABS PETG printing, V Electronics">
+    <title>V Electronics | Pro Manufacturing Hub (Industrial Size)</title>
+    <meta name="description" content="Instant 3D printing quotes online. Upload STL files for rapid prototyping. Industrial build volume support (up to 1m). Professional manufacturing hub based in Pune.">
+    <meta name="keywords" content="3D printing service India, large scale 3d printing, auto lay flat, STL slicer, rapid prototyping Pune, V Electronics">
     <meta name="author" content="V Electronics Pvt Ltd">
     <link rel="canonical" href="https://velectronics.online/">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="Get Instant 3D Printing Quotes | V Electronics">
-    <meta property="og:description" content="Upload your STL file and get instant manufacturing cost estimates. Professional 3D printing service.">
+    <meta property="og:description" content="Upload your STL file (Large Models Supported) and get instant manufacturing cost estimates.">
     <meta property="og:url" content="https://velectronics.online/">
     <meta property="og:image" content="https://velectronics.online/assets/VLOGO.jpg">
     <meta property="og:site_name" content="V Electronics Manufacturing Hub">
@@ -50,6 +50,7 @@
       ]
     }
     </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -77,6 +78,8 @@
             background-color: #02040a; 
             color: #f8fafc; 
             overflow: hidden;
+            /* Prevent bounce scrolling on iOS */
+            overscroll-behavior: none;
         }
 
         /* Animated Mesh Background */
@@ -102,12 +105,12 @@
             box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* FIXED: Range Sliders (Visibility High) */
+        /* Sliders optimized for Touch */
         input[type=range] {
             -webkit-appearance: none;
             width: 100%;
             background: transparent;
-            height: 30px;
+            height: 40px; /* Taller touch target */
             cursor: pointer;
             margin: 5px 0;
         }
@@ -121,18 +124,17 @@
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 18px;
-            width: 18px;
+            height: 24px; /* Larger thumb for fingers */
+            width: 24px;
             border-radius: 50%;
             background: #3b82f6;
             border: 2px solid white;
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
-            margin-top: -7px;
+            margin-top: -10px;
             transition: transform 0.1s;
         }
-        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
 
-        /* Interactive Elements */
         .pro-input {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -146,12 +148,14 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.2s;
             position: relative; overflow: hidden;
+            /* Prevent text selection on buttons */
+            user-select: none;
+            -webkit-user-select: none;
         }
         .pro-btn:hover { background: rgba(255,255,255,0.1); border-color: white; }
         .pro-btn:active { transform: scale(0.98); }
 
-        /* Feature Cards Grid */
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; }
         .feature-card {
             position: relative; cursor: pointer;
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
@@ -161,11 +165,9 @@
         .feature-card input:checked + div { background: rgba(59, 130, 246, 0.15); border-color: #3b82f6; }
         .feature-card input:checked + div span { color: #60a5fa; font-weight: 600; }
 
-        /* Cost Chart Bar */
         .cost-bar { height: 6px; border-radius: 3px; overflow: hidden; display: flex; width: 100%; margin-top: 8px; background: #0f172a; }
         .cost-seg { height: 100%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* Utils */
         .mono { font-family: 'JetBrains Mono', monospace; }
         .drop-active { border-color: var(--highlight) !important; background: rgba(59, 130, 246, 0.1) !important; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -174,59 +176,69 @@
         details > summary::-webkit-details-marker { display: none; }
         details[open] > summary .arrow { transform: rotate(180deg); }
 
-        @media (max-width: 768px) {
+        /* Mobile specific layout tweaks */
+        @media (max-width: 1024px) {
             #view-configurator { flex-direction: column; }
-            #drop-zone { height: 40vh; flex-shrink: 0; }
-            #sidebar { flex: 1; }
-            body { overflow-y: auto; }
+            #drop-zone { height: 45vh; flex-shrink: 0; }
+            #sidebar { flex: 1; height: 55vh; }
+            body { overflow: hidden; } /* Ensure body doesn't scroll */
         }
+        
+        /* Ensure 3D canvas captures touch for rotation, not page scroll */
+        #canvas-container { touch-action: none; }
     </style>
 </head>
-<body class="h-screen w-full relative bg-[#02040a]">
+<body class="h-[100dvh] w-full relative bg-[#02040a]">
 
-    <div id="view-configurator" class="w-full h-full flex flex-col md:flex-row relative z-10 transition-transform duration-500 ease-in-out">
+    <div id="view-configurator" class="w-full h-full flex flex-col lg:flex-row relative z-10 transition-transform duration-500 ease-in-out">
         
-        <div class="relative w-full md:w-3/4 h-[50vh] md:h-full group bg-gradient-to-b from-[#0f172a]/20 to-[#02040a]" id="drop-zone">
+        <div class="relative w-full lg:w-3/4 h-[45vh] lg:h-full group bg-gradient-to-b from-[#0f172a]/20 to-[#02040a]" id="drop-zone">
             <div class="cyber-grid"></div>
             <div id="canvas-container" class="w-full h-full cursor-move relative z-0"></div>
             
-            <div class="absolute top-6 right-6 flex flex-col gap-2 pointer-events-auto z-20">
-                <button id="btn-snapshot" class="glass-panel w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="Take Snapshot">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <div class="absolute top-4 right-4 flex flex-col gap-2 pointer-events-auto z-20">
+                <button id="btn-snapshot" class="glass-panel w-9 h-9 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="Take Snapshot">
+                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 </button>
-                <button id="btn-grid" class="glass-panel w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="Toggle Grid">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                <button id="btn-grid" class="glass-panel w-9 h-9 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="Toggle Grid">
+                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                 </button>
-                <button id="btn-slicer" class="glass-panel w-10 h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="X-Ray / Slicer">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <button id="btn-vol" class="glass-panel w-9 h-9 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="Toggle Max Volume Box">
+                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                </button>
+                <button id="btn-slicer" class="glass-panel w-9 h-9 lg:w-10 lg:h-10 rounded-lg flex items-center justify-center hover:bg-white/10 text-slate-300 hover:text-white transition" title="X-Ray / Slicer">
+                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </button>
             </div>
 
-            <div id="slicer-controls" class="absolute top-6 right-20 w-48 glass-panel p-4 rounded-xl hidden transition-all z-20">
+            <div id="slicer-controls" class="absolute top-16 right-16 w-40 lg:w-48 glass-panel p-4 rounded-xl hidden transition-all z-20">
                 <label class="text-[10px] text-blue-400 uppercase font-bold block mb-2">X-Ray Slicing Height</label>
                 <input type="range" id="slice-slider" min="0" max="100" value="100" class="w-full">
             </div>
 
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 pointer-events-auto z-20 glass-panel p-1.5 rounded-full border border-white/10">
-                <button id="btn-wireframe" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-white/10 text-slate-300 transition flex items-center gap-2">
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 lg:gap-3 pointer-events-auto z-20 glass-panel p-1.5 rounded-full border border-white/10 whitespace-nowrap overflow-x-auto max-w-[95vw]">
+                <button id="btn-wireframe" class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[10px] lg:text-xs font-medium hover:bg-white/10 text-slate-300 transition flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-slate-500"></span> Wireframe
                 </button>
-                <button id="btn-reset-view" class="px-4 py-2 rounded-full text-xs font-medium hover:bg-white/10 text-slate-300 transition">Reset Cam</button>
-                <button id="btn-rotate" class="px-4 py-2 rounded-full text-xs font-medium bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition flex items-center gap-2">
+                <button id="btn-reset-view" class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[10px] lg:text-xs font-medium hover:bg-white/10 text-slate-300 transition">Reset Cam</button>
+                <button id="btn-lay-flat" class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[10px] lg:text-xs font-medium bg-green-900/50 hover:bg-green-800 text-green-200 border border-green-500/30 transition flex items-center gap-2">
+                   <span>📐 Lay Flat</span>
+                </button>
+                <button id="btn-rotate" class="px-3 lg:px-4 py-1.5 lg:py-2 rounded-full text-[10px] lg:text-xs font-medium bg-blue-600 text-white shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition flex items-center gap-2">
                     <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                    Auto-Spin
+                    Spin
                 </button>
             </div>
 
-            <div class="absolute top-6 left-6 pointer-events-none z-20">
-                <div class="glass-panel px-5 py-4 rounded-2xl border-l-4 border-blue-500 space-y-3 shadow-2xl">
+            <div class="absolute top-4 left-4 pointer-events-none z-20">
+                <div class="glass-panel px-4 lg:px-5 py-3 lg:py-4 rounded-2xl border-l-4 border-blue-500 space-y-2 lg:space-y-3 shadow-2xl">
                     <div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Bounding Box</span>
-                        <span id="hud-dims" class="mono text-sm text-white block mt-1">0 x 0 x 0 mm</span>
+                        <span class="text-[9px] lg:text-[10px] text-slate-400 uppercase tracking-widest font-bold">Bounding Box</span>
+                        <span id="hud-dims" class="mono text-xs lg:text-sm text-white block mt-0.5">0 x 0 x 0 mm</span>
                     </div>
                     <div>
-                        <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Volume</span>
-                        <span id="hud-vol" class="mono text-sm text-white block mt-1">0.00 cm³</span>
+                        <span class="text-[9px] lg:text-[10px] text-slate-400 uppercase tracking-widest font-bold">Volume</span>
+                        <span id="hud-vol" class="mono text-xs lg:text-sm text-white block mt-0.5">0.00 cm³</span>
                     </div>
                 </div>
             </div>
@@ -239,13 +251,13 @@
             </div>
 
             <div id="drag-hint" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300 bg-blue-900/20 backdrop-blur-sm border-2 border-dashed border-blue-500 m-8 rounded-3xl z-40">
-                <h2 class="text-3xl font-bold text-white tracking-widest drop-shadow-lg">DROP STL FILE HERE</h2>
+                <h2 class="text-2xl lg:text-3xl font-bold text-white tracking-widest drop-shadow-lg text-center">DROP STL HERE</h2>
             </div>
         </div>
 
-        <div class="w-full md:w-1/4 glass-panel border-l border-white/5 flex flex-col h-full z-30 shadow-2xl relative" id="sidebar">
+        <div class="w-full lg:w-1/4 glass-panel border-l border-white/5 flex flex-col h-[55vh] lg:h-full z-30 shadow-2xl relative" id="sidebar">
             
-            <div class="p-5 border-b border-white/5 flex items-center gap-4 bg-gradient-to-r from-slate-900/80 to-transparent">
+            <div class="p-4 lg:p-5 border-b border-white/5 flex items-center gap-4 bg-gradient-to-r from-slate-900/80 to-transparent flex-shrink-0">
                 <img src="assets/VLOGO.jpg" alt="V" class="w-10 h-10 rounded-lg shadow-lg ring-1 ring-white/10 object-cover bg-white">
                 <div>
                     <h1 class="font-bold text-white text-lg tracking-tight leading-none">V ELECTRONICS</h1>
@@ -253,22 +265,22 @@
                 </div>
             </div>
 
-            <div class="flex-1 overflow-y-auto scrollbar-hide p-5 space-y-4">
+            <div class="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-5 space-y-4">
                 
                 <div class="relative group mb-2">
                     <input type="file" id="file-input" accept=".stl" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
                     <div class="pro-input py-6 px-4 rounded-xl flex flex-col items-center justify-center gap-2 group-hover:border-blue-500 border-dashed border-2 border-slate-600 bg-slate-900/40 transition-colors">
                         <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                        <span id="filename-display" class="text-xs text-slate-300 font-medium truncate max-w-[200px]">Click or Drag STL File</span>
+                        <span id="filename-display" class="text-xs text-slate-300 font-medium truncate max-w-[200px]">Click to Upload STL</span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
-                    <button class="pro-btn py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white" onclick="applyPreset('proto')">
+                    <button class="pro-btn py-3 lg:py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white" onclick="applyPreset('proto')">
                         <span class="block text-blue-400 text-[10px] font-normal mb-0.5">CHEAPEST</span>
                         🚀 Prototype
                     </button>
-                    <button class="pro-btn py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white" onclick="applyPreset('strong')">
+                    <button class="pro-btn py-3 lg:py-2.5 rounded-lg text-xs font-bold text-slate-300 hover:text-white" onclick="applyPreset('strong')">
                         <span class="block text-green-400 text-[10px] font-normal mb-0.5">DURABLE</span>
                         💪 Strong
                     </button>
@@ -288,12 +300,12 @@
                                 <span class="text-[10px] text-slate-400 uppercase font-bold">Scale Factor</span>
                                 <span id="scale-display" class="text-xs font-mono font-bold text-blue-400 bg-blue-900/30 px-2 py-0.5 rounded">100%</span>
                             </div>
-                            <input type="range" id="scale-sel" min="0.1" max="3.0" step="0.05" value="1.0">
+                            <input type="range" id="scale-sel" min="0.1" max="5.0" step="0.05" value="1.0">
                         </div>
                         <div class="grid grid-cols-3 gap-2">
-                            <button class="pro-btn py-2 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('x')">Rot X 90°</button>
-                            <button class="pro-btn py-2 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('y')">Rot Y 90°</button>
-                            <button class="pro-btn py-2 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('z')">Rot Z 90°</button>
+                            <button class="pro-btn py-3 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('x')">Rot X 90°</button>
+                            <button class="pro-btn py-3 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('y')">Rot Y 90°</button>
+                            <button class="pro-btn py-3 rounded text-[10px] text-slate-400 hover:text-white" onclick="rotateMesh('z')">Rot Z 90°</button>
                         </div>
                     </div>
                 </details>
@@ -310,31 +322,52 @@
                         <div class="flex gap-2 mt-2">
                             <div class="w-16">
                                 <label class="text-[9px] text-slate-500 uppercase block mb-1">Qty</label>
-                                <input type="number" id="qty-input" value="1" min="1" class="pro-input w-full p-2 rounded text-xs text-center font-bold">
+                                <input type="number" id="qty-input" value="1" min="1" class="pro-input w-full p-2.5 rounded text-xs text-center font-bold">
                             </div>
                             <div class="flex-1">
                                 <label class="text-[9px] text-slate-500 uppercase block mb-1">Type</label>
-                                <select id="material-sel" class="pro-input w-full p-2 rounded text-xs appearance-none">
+                                <select id="material-sel" class="pro-input w-full p-2.5 rounded text-xs appearance-none">
                                     <option value="PLA">PLA (Eco-Friendly)</option>
                                     <option value="PETG">PETG (Tough & Heat)</option>
                                     <option value="ABS">ABS (Industrial)</option>
                                     <option value="TPU">TPU (Flexible)</option>
                                     <option value="CF">Carbon Fiber Nylon</option>
+                                    <option value="ASA">ASA (Outdoor UV)</option>
                                 </select>
                             </div>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-2">
+                             <div>
+                                <label class="text-[9px] text-slate-500 uppercase block mb-1">Layer Height</label>
+                                <select id="layer-sel" class="pro-input w-full p-2.5 rounded text-xs">
+                                    <option value="0.12">0.12mm (Detail)</option>
+                                    <option value="0.20" selected>0.20mm (Std)</option>
+                                    <option value="0.28">0.28mm (Draft)</option>
+                                </select>
+                             </div>
+                             <div>
+                                <label class="text-[9px] text-slate-500 uppercase block mb-1">Wall Loops</label>
+                                <select id="wall-sel" class="pro-input w-full p-2.5 rounded text-xs">
+                                    <option value="2">2 Walls</option>
+                                    <option value="3" selected>3 Walls</option>
+                                    <option value="4">4 Walls</option>
+                                    <option value="6">6+ (Solid)</option>
+                                </select>
+                             </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="text-[9px] text-slate-500 uppercase block mb-1">Strength</label>
-                                <select id="strength-sel" class="pro-input w-full p-2 rounded text-xs">
+                                <select id="strength-sel" class="pro-input w-full p-2.5 rounded text-xs">
                                     <option value="decorative">Standard Walls</option>
                                     <option value="structural">Structural (+)</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[9px] text-slate-500 uppercase block mb-1">Finish</label>
-                                <select id="finish-sel" class="pro-input w-full p-2 rounded text-xs">
+                                <select id="finish-sel" class="pro-input w-full p-2.5 rounded text-xs">
                                     <option value="raw">Raw Finish</option>
                                     <option value="sanded">Sanded</option>
                                     <option value="painted">Painted</option>
@@ -350,8 +383,8 @@
                             <input type="range" id="infill-sel" min="10" max="100" step="5" value="20" class="block w-full">
                             
                             <div class="mt-2 pt-2 border-t border-white/5">
-                                <label class="text-[9px] text-slate-400 uppercase font-bold block mb-1">Infill Pattern {6}</label>
-                                <select id="pattern-sel" class="pro-input w-full p-1.5 rounded text-xs">
+                                <label class="text-[9px] text-slate-400 uppercase font-bold block mb-1">Infill Pattern</label>
+                                <select id="pattern-sel" class="pro-input w-full p-2 rounded text-xs">
                                     <option value="grid">Grid (Standard)</option>
                                     <option value="gyroid">Gyroid (3D Strength)</option>
                                     <option value="honeycomb">Honeycomb (Strong)</option>
@@ -458,8 +491,8 @@
                 </details>
             </div>
 
-            <div class="bg-slate-900/95 border-t border-white/10 backdrop-blur-xl p-5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-40">
-                <div class="mb-4">
+            <div class="bg-slate-900/95 border-t border-white/10 backdrop-blur-xl p-4 lg:p-5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-40 flex-shrink-0">
+                <div class="mb-3 lg:mb-4">
                     <div class="flex justify-between text-[10px] text-slate-500 mb-1 uppercase font-bold tracking-wider">
                         <span>Material</span><span>Machine</span><span>Labor</span>
                     </div>
@@ -470,18 +503,18 @@
                     </div>
                 </div>
 
-                <div class="flex justify-between items-end mb-4">
+                <div class="flex justify-between items-end mb-3 lg:mb-4">
                     <div>
                         <span class="text-[10px] text-slate-400 uppercase tracking-widest">Total Estimate</span>
-                        <span id="est-price" class="text-3xl font-bold text-white tracking-tighter block mt-1">₹0</span>
+                        <span id="est-price" class="text-2xl lg:text-3xl font-bold text-white tracking-tighter block mt-1">₹0</span>
                     </div>
                     <div class="text-right">
-                        <span id="est-time" class="text-sm font-mono text-blue-400 font-bold block bg-blue-900/20 px-2 rounded mb-1">0h 0m</span>
+                        <span id="est-time" class="text-xs lg:text-sm font-mono text-blue-400 font-bold block bg-blue-900/20 px-2 rounded mb-1">0h 0m</span>
                         <span id="footer-weight" class="text-[10px] text-slate-500 block font-mono">0g</span>
                     </div>
                 </div>
 
-                <button id="btn-goto-cart" disabled class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs flex items-center justify-center gap-2 group border border-blue-400/30">
+                <button id="btn-goto-cart" disabled class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 lg:py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs flex items-center justify-center gap-2 group border border-blue-400/30">
                     <span>Review Order</span>
                     <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
@@ -492,37 +525,37 @@
     <div id="view-checkout" class="hidden fixed inset-0 z-50 bg-[#02040a] overflow-y-auto cyber-bg transition-opacity duration-300">
         <div class="cyber-grid fixed"></div> <div class="max-w-7xl mx-auto p-4 md:p-8 min-h-full flex flex-col relative z-10">
             
-            <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-6 bg-[#02040a]/80 backdrop-blur-xl sticky top-0 z-20 py-4 px-2 rounded-b-2xl">
-                <div class="flex items-center gap-4">
-                    <img src="assets/VLOGO.jpg" class="w-14 h-14 rounded-xl shadow-lg border border-white/10">
+            <div class="flex justify-between items-center mb-6 lg:mb-8 border-b border-white/10 pb-6 bg-[#02040a]/80 backdrop-blur-xl sticky top-0 z-20 py-4 px-2 rounded-b-2xl">
+                <div class="flex items-center gap-3 lg:gap-4">
+                    <img src="assets/VLOGO.jpg" class="w-10 h-10 lg:w-14 lg:h-14 rounded-xl shadow-lg border border-white/10">
                     <div>
-                        <h1 class="text-2xl font-bold text-white tracking-wide">CHECKOUT</h1>
-                        <p class="text-[10px] text-blue-400 uppercase tracking-widest font-bold">V Electronics Pvt Ltd</p>
+                        <h1 class="text-xl lg:text-2xl font-bold text-white tracking-wide">CHECKOUT</h1>
+                        <p class="text-[9px] lg:text-[10px] text-blue-400 uppercase tracking-widest font-bold">V Electronics Pvt Ltd</p>
                     </div>
                 </div>
-                <button id="btn-back" class="glass-panel px-5 py-2 rounded-full text-xs font-bold hover:bg-white/10 text-slate-300 transition flex items-center gap-2 border border-white/10">
+                <button id="btn-back" class="glass-panel px-4 lg:px-5 py-2 rounded-full text-xs font-bold hover:bg-white/10 text-slate-300 transition flex items-center gap-2 border border-white/10">
                     <span>← Edit</span>
                 </button>
             </div>
 
-            <div class="grid lg:grid-cols-12 gap-8 flex-1">
+            <div class="grid lg:grid-cols-12 gap-8 flex-1 pb-10">
                 <div class="lg:col-span-7 space-y-6">
                     
-                    <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-600 shadow-2xl">
+                    <div class="glass-panel p-5 lg:p-6 rounded-2xl border-l-4 border-blue-600 shadow-2xl">
                          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Service Provider Info</h3>
                          <div class="flex flex-col md:flex-row justify-between gap-4">
                             <div>
                                 <h4 class="text-white font-bold text-lg">V ELECTRONICS PVT LTD</h4>
                                 <p class="text-sm text-slate-400">Warehouse #12, Dighi, Pune - 411015</p>
                             </div>
-                            <div class="text-right text-sm">
+                            <div class="text-left md:text-right text-sm">
                                 <p class="text-blue-400 font-mono">+91 7892719496</p>
                                 <p class="text-slate-500">care.invelectronicspvtltd@gmail.com</p>
                             </div>
                          </div>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                    <div class="glass-panel p-5 lg:p-6 rounded-2xl border border-white/5">
                         <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <span class="w-6 h-6 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-400 border border-blue-500/30">1</span>
                             Dispatch Warehouse
@@ -551,7 +584,7 @@
                         </div>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-2xl border border-white/5">
+                    <div class="glass-panel p-5 lg:p-6 rounded-2xl border border-white/5">
                         <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-6 flex items-center gap-2">
                             <span class="w-6 h-6 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-400 border border-blue-500/30">2</span>
                             Shipping & Business Details
@@ -579,11 +612,11 @@
                 </div>
 
                 <div class="lg:col-span-5">
-                    <div class="glass-panel p-6 rounded-2xl sticky top-24 border-t-4 border-green-500 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                    <div class="glass-panel p-5 lg:p-6 rounded-2xl sticky top-24 border-t-4 border-green-500 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                         <h3 class="text-lg font-bold text-white mb-6 tracking-wide">ORDER SUMMARY</h3>
                         
                         <div class="bg-slate-800/40 rounded-xl p-4 mb-6 flex gap-4 border border-white/5">
-                            <div class="w-14 h-14 bg-blue-600/20 rounded-lg flex items-center justify-center text-blue-400 border border-blue-500/20">
+                            <div class="w-14 h-14 bg-blue-600/20 rounded-lg flex items-center justify-center text-blue-400 border border-blue-500/20 flex-shrink-0">
                                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                             </div>
                             <div class="flex-1 overflow-hidden">
@@ -602,7 +635,7 @@
                         
                         <div class="flex justify-between items-end mb-8">
                             <span class="text-slate-300 font-bold text-sm uppercase tracking-widest">Total Pay</span>
-                            <span id="bill-total" class="text-4xl font-bold text-white tracking-tighter text-shadow-lg">₹0</span>
+                            <span id="bill-total" class="text-3xl lg:text-4xl font-bold text-white tracking-tighter text-shadow-lg">₹0</span>
                         </div>
                         
                         <div class="mb-6">
@@ -652,20 +685,21 @@
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
         import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // APP STATE (Expanded)
+        // APP STATE (Expanded for Pro Features)
         let STATE = {
             file: null, baseVolume: 0, baseArea: 0,
             weight: 0, cost: 0, time: 0, shipping: 0,
             material: 'PLA', quality: 'std', infill: 20, color: '#3b82f6', infillPattern: 'grid',
             scale: 1.0, qty: 1, finish: 'raw', strength: 'decorative', tolerance: 'std',
+            layerHeight: 0.2, wallLoops: 3, 
             hasSupports: false, hasAdhesion: false, isRush: false, isQC: false,
             isEpoxy: false, isVapor: false, isHardware: false, isRemoveBrand: false, isPrivacy: false,
             isInserts: false, isUV: false, isAssembly: false, isRepair: false,
-            isCert: false, isReport: false, isSandblast: false, // New States
+            isCert: false, isReport: false, isSandblast: false,
             autoRotate: true
         };
 
-        // Payment Toggle Logic (Global Scope)
+        // Payment Toggle Logic
         window.togglePayment = (method) => {
             if(method === 'UPI') {
                 document.getElementById('upi-section').classList.remove('hidden');
@@ -680,8 +714,9 @@
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
 
-        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(60, 60, 90);
+        // 1. IMPROVED CAMERA FOR LARGE MODELS
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 10000); 
+        camera.position.set(200, 200, 300); 
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true }); 
         renderer.setSize(container.clientWidth, container.clientHeight);
@@ -692,22 +727,34 @@
         container.appendChild(renderer.domElement);
 
         // LIGHTING (Studio)
-        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-        dirLight.position.set(50, 100, 50); dirLight.castShadow = true; scene.add(dirLight);
+        dirLight.position.set(100, 200, 100); dirLight.castShadow = true; 
+        dirLight.shadow.camera.top = 500; dirLight.shadow.camera.bottom = -500;
+        dirLight.shadow.camera.left = -500; dirLight.shadow.camera.right = 500; 
+        scene.add(dirLight);
         const rimLight = new THREE.DirectionalLight(0x3b82f6, 0.8);
         rimLight.position.set(-50, 20, -50); scene.add(rimLight);
 
-        // GRID
-        const grid = new THREE.GridHelper(200, 40, 0x3b82f6, 0x1e293b);
+        // 2. MASSIVE BED GRID (1 METER)
+        const grid = new THREE.GridHelper(1000, 100, 0x3b82f6, 0x1e293b); 
         grid.material.transparent = true; grid.material.opacity = 0.15;
         scene.add(grid);
 
+        // 3. BUILD VOLUME VISUALIZER (500mm Box)
+        const volGeom = new THREE.BoxGeometry(500, 500, 500);
+        const volMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true, transparent: true, opacity: 0.05 });
+        const volBox = new THREE.Mesh(volGeom, volMat);
+        volBox.position.y = 250; 
+        volBox.visible = false;
+        scene.add(volBox);
+
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true; controls.autoRotate = STATE.autoRotate;
+        controls.maxDistance = 5000; 
 
         // MATERIAL & CLIPPING
-        const clipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 100);
+        const clipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1000);
         const mat = new THREE.MeshStandardMaterial({ 
             color: STATE.color, roughness: 0.4, metalness: 0.1, 
             clippingPlanes: [clipPlane], clipShadows: true, side: THREE.DoubleSide
@@ -716,14 +763,14 @@
 
         let mesh = null; let wireframe = null; let supportGroup = null;
 
-        // TREE SUPPORTS
+        // TREE SUPPORTS GENERATOR
         function generateTreeSupports(mesh) {
             const box = new THREE.Box3().setFromObject(mesh);
             const size = new THREE.Vector3(); box.getSize(size);
             const center = new THREE.Vector3(); box.getCenter(center);
             const group = new THREE.Group();
             const mat = new THREE.LineBasicMaterial({ color: 0x22c55e, opacity: 0.5, transparent: true }); 
-            const trunkCount = Math.max(5, Math.floor((size.x * size.z) / 100)); 
+            const trunkCount = Math.max(5, Math.floor((size.x * size.z) / 200)); 
             for(let i=0; i<trunkCount; i++) {
                 const startX = center.x + (Math.random() - 0.5) * size.x * 0.9;
                 const startZ = center.z + (Math.random() - 0.5) * size.z * 0.9;
@@ -748,6 +795,19 @@
             if(visible) { supportGroup = generateTreeSupports(mesh); scene.add(supportGroup); }
         }
 
+        // AUTO LAY FLAT LOGIC
+        window.autoLayFlat = () => {
+             if(!mesh) return;
+             mesh.rotation.x = -Math.PI / 2; 
+             if(wireframe) wireframe.rotation.x = -Math.PI / 2;
+             
+             const box = new THREE.Box3().setFromObject(mesh);
+             const yOffset = -box.min.y;
+             mesh.position.y += yOffset; 
+             if(wireframe) wireframe.position.y += yOffset;
+             if(STATE.hasSupports) toggleSupportVis(true);
+        };
+
         window.rotateMesh = (axis) => { 
             if(mesh) { 
                 mesh.rotation[axis] += Math.PI/2; if(wireframe) wireframe.rotation[axis] += Math.PI/2;
@@ -762,12 +822,14 @@
             if(type === 'proto') {
                 document.getElementById('material-sel').value = 'PLA';
                 document.getElementById('infill-sel').value = 15;
-                STATE.material = 'PLA'; STATE.infill = 15;
+                document.getElementById('layer-sel').value = "0.28"; 
+                STATE.material = 'PLA'; STATE.infill = 15; STATE.layerHeight = 0.28;
             } else if(type === 'strong') {
                 document.getElementById('material-sel').value = 'PETG';
                 document.getElementById('infill-sel').value = 50;
                 document.getElementById('strength-sel').value = 'structural';
-                STATE.material = 'PETG'; STATE.infill = 50; STATE.strength = 'structural';
+                document.getElementById('wall-sel').value = "4"; 
+                STATE.material = 'PETG'; STATE.infill = 50; STATE.strength = 'structural'; STATE.wallLoops = 4;
             }
             document.getElementById('infill-display').innerText = STATE.infill + '%';
             updateEstimates();
@@ -779,7 +841,8 @@
                 supports: STATE.hasSupports, adhesion: STATE.hasAdhesion, rush: STATE.isRush, qc: STATE.isQC,
                 epoxy: STATE.isEpoxy, vapor: STATE.isVapor, hardware: STATE.isHardware, removeBrand: STATE.isRemoveBrand,
                 inserts: STATE.isInserts, uv: STATE.isUV, assembly: STATE.isAssembly, repair: STATE.isRepair,
-                cert: STATE.isCert, report: STATE.isReport, sandblast: STATE.isSandblast // New Flags
+                pattern: STATE.infillPattern, cert: STATE.isCert, report: STATE.isReport, sandblast: STATE.isSandblast,
+                layerHeight: STATE.layerHeight, wallLoops: STATE.wallLoops 
             });
             
             STATE.weight = metrics.weight; STATE.cost = metrics.totalCost; STATE.shipping = metrics.shippingCost; STATE.time = metrics.timeHours;
@@ -813,9 +876,10 @@
 
             document.getElementById('cart-specs').innerHTML = `
                 <div class="flex justify-between"><span>Material:</span> <span class="text-white">${PRICING.materials[STATE.material].name}</span></div>
+                <div class="flex justify-between"><span>Layer Height:</span> <span class="text-white">${STATE.layerHeight}mm</span></div>
+                <div class="flex justify-between"><span>Walls:</span> <span class="text-white">${STATE.wallLoops}</span></div>
                 <div class="flex justify-between"><span>Quantity:</span> <span class="text-white">${STATE.qty} Unit(s)</span></div>
                 <div class="flex justify-between"><span>Infill:</span> <span class="text-white">${STATE.infill}% (${STATE.infillPattern})</span></div>
-                <div class="flex justify-between"><span>Weight:</span> <span class="text-white">${STATE.weight.toFixed(0)}g</span></div>
             `;
 
             const addonsDiv = document.getElementById('cart-addons');
@@ -827,7 +891,6 @@
             if(STATE.isEpoxy) activeAddons.push('Epoxy Coating');
             if(STATE.isInserts) activeAddons.push('Heat-Set Inserts');
             if(STATE.finish !== 'raw') activeAddons.push(`${STATE.finish.toUpperCase()} Finish`);
-            // New Addons listing
             if(STATE.isCert) activeAddons.push('Material Certificate');
             if(STATE.isReport) activeAddons.push('Dimensional Report');
             if(STATE.isSandblast) activeAddons.push('Sandblasting');
@@ -852,6 +915,7 @@
                 geom.computeBoundingBox();
                 const box = geom.boundingBox; const center = new THREE.Vector3(); box.getCenter(center); const size = new THREE.Vector3(); box.getSize(size);
                 
+                // ADJUSTED LOGIC FOR LARGE MODELS
                 if(size.y < 2) { 
                     geom.scale(10,10,10); geom.computeBoundingBox(); box.getCenter(center); box.getSize(size); 
                 }
@@ -874,7 +938,12 @@
                 document.getElementById('slice-slider').value = maxY;
                 clipPlane.constant = maxY;
 
-                const maxDim = Math.max(size.x, size.y, size.z); const dist = maxDim * 2.5; camera.position.set(dist, dist, dist); controls.target.set(0, size.y/2, 0); controls.update();
+                // IMPROVED CAMERA ZOOM FOR HUGE MODELS
+                const maxDim = Math.max(size.x, size.y, size.z); 
+                const dist = maxDim * 2.0; 
+                camera.position.set(dist, dist, dist); 
+                controls.target.set(0, size.y/2, 0); 
+                controls.update();
 
                 document.getElementById('hud-dims').innerText = `${size.x.toFixed(0)}x${size.y.toFixed(0)}x${size.z.toFixed(0)}mm`;
                 document.getElementById('hud-vol').innerText = STATE.baseVolume.toFixed(2) + ' cm³';
@@ -897,6 +966,8 @@
         dropZone.addEventListener('drop', (e) => { const dt = e.dataTransfer; if(dt.files.length > 0 && dt.files[0].name.toLowerCase().endsWith('.stl')) { STATE.file = dt.files[0]; id('filename-display').innerText = STATE.file.name; id('cart-file').innerText = STATE.file.name; id('loader-3d').classList.remove('hidden'); const reader = new FileReader(); reader.onload = (e) => { loadSTL(e.target.result, STATE.file.name); id('loader-3d').classList.add('hidden'); }; reader.readAsArrayBuffer(STATE.file); } });
 
         id('btn-grid').addEventListener('click', () => { grid.visible = !grid.visible; });
+        id('btn-vol').addEventListener('click', () => { volBox.visible = !volBox.visible; }); 
+        id('btn-lay-flat').addEventListener('click', () => { autoLayFlat(); }); 
         id('btn-slicer').addEventListener('click', () => { id('slicer-controls').classList.toggle('hidden'); });
         id('btn-snapshot').addEventListener('click', () => {
             renderer.render(scene, camera);
@@ -907,7 +978,9 @@
         id('slice-slider').addEventListener('input', (e) => { clipPlane.constant = parseFloat(e.target.value); });
         id('material-sel').addEventListener('change', (e) => { STATE.material = e.target.value; updateEstimates(); });
         id('infill-sel').addEventListener('input', (e) => { STATE.infill = parseInt(e.target.value); id('infill-display').innerText = STATE.infill + '%'; updateEstimates(); });
-        // NEW: Pattern Listener
+        
+        id('layer-sel').addEventListener('change', (e) => { STATE.layerHeight = parseFloat(e.target.value); updateEstimates(); });
+        id('wall-sel').addEventListener('change', (e) => { STATE.wallLoops = parseInt(e.target.value); updateEstimates(); });
         id('pattern-sel').addEventListener('change', (e) => { STATE.infillPattern = e.target.value; updateEstimates(); });
         
         id('scale-sel').addEventListener('input', (e) => { STATE.scale = parseFloat(e.target.value); id('scale-display').innerText = Math.round(STATE.scale*100) + '%'; if(mesh) { mesh.scale.setScalar(STATE.scale); wireframe.scale.setScalar(STATE.scale); } updateEstimates(); });
@@ -930,7 +1003,7 @@
         });
 
         const colors = ['#3b82f6', '#ef4444', '#10b981', '#fbbf24', '#ffffff', '#1e293b', '#6366f1'];
-        colors.forEach(c => { const b = document.createElement('div'); b.className = 'w-6 h-6 rounded-full border border-slate-600 cursor-pointer hover:scale-125 transition shadow-lg'; b.style.backgroundColor = c; b.onclick = () => { STATE.color = c; if(mesh) mesh.material.color.set(c); updateEstimates(); }; id('color-picker').appendChild(b); });
+        colors.forEach(c => { const b = document.createElement('div'); b.className = 'w-6 h-6 lg:w-8 lg:h-8 rounded-full border border-slate-600 cursor-pointer hover:scale-125 transition shadow-lg'; b.style.backgroundColor = c; b.onclick = () => { STATE.color = c; if(mesh) mesh.material.color.set(c); updateEstimates(); }; id('color-picker').appendChild(b); });
 
         id('btn-wireframe').addEventListener('click', () => { if(wireframe) wireframe.visible = !wireframe.visible; });
         id('btn-reset-view').addEventListener('click', () => { controls.reset(); });
@@ -951,7 +1024,6 @@
             const form = id('checkout-form');
             if(!form.reportValidity()) return;
             
-            // Get Warehouse & Payment Data
             const warehouse = document.querySelector('input[name="warehouse"]:checked').value;
             const payMethod = document.querySelector('input[name="pay-method"]:checked').value;
             const utrRef = document.getElementById('utr-input').value;
@@ -974,8 +1046,8 @@
                         finish: STATE.finish, strength: STATE.strength, cost: STATE.cost, rush: STATE.isRush, qc: STATE.isQC,
                         epoxy: STATE.isEpoxy, vapor: STATE.isVapor, hardware: STATE.isHardware, privacy: STATE.isPrivacy,
                         inserts: STATE.isInserts, uv: STATE.isUV, assembly: STATE.isAssembly, repair: STATE.isRepair,
-                        // NEW SPEC FIELDS
-                        pattern: STATE.infillPattern, cert: STATE.isCert, report: STATE.isReport, sandblast: STATE.isSandblast
+                        pattern: STATE.infillPattern, cert: STATE.isCert, report: STATE.isReport, sandblast: STATE.isSandblast,
+                        layerHeight: STATE.layerHeight, wallLoops: STATE.wallLoops
                     },
                     status: 'Pending', createdAt: serverTimestamp()
                 });
